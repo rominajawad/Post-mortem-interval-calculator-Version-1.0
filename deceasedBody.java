@@ -1,3 +1,10 @@
+/**
+*This class shows the characteristics of the object. Each dead body will be the object
+*
+* @param victimId, bodyTemp, ambientTemp, livorColor, isLivorFixed
+* return the object (makes it)
+*/
+
 public class deceasedBody {
     private String victimId;
     private double bodyTemp;
@@ -40,7 +47,9 @@ public class deceasedBody {
         // Standard Glaister formula estimation framework
         return (37.0 - bodyTemp) / 1.5; 
     }
-
+ /*
+This method is for calculating livor mortis
+*/
     public String calculateLivorMortis(boolean fixed) {
         if (fixed) {
             return "At least 6 to 8 hours ago (lividity is permanent)";
@@ -49,6 +58,9 @@ public class deceasedBody {
         }
     }
 
+    /*
+    This calculates the rigor mortis by the help of the array
+    */
     public String calculateRigorMortis(int[] stages) {
         // Peak rigor check (averaging around completely rigid level 3)
         if (stages[0] == 3 && stages[1] == 3 && stages[2] == 3) {
