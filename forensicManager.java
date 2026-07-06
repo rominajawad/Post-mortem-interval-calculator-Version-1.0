@@ -9,7 +9,9 @@ public class forensicManager {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ArrayList<deceasedBody> cases = new ArrayList<>();
-
+/*
+This runs the while loop for an interactive menu
+*/
         while (true) {
             System.out.println("==================================================");
             System.out.println("FORENSIC SCIENCE CRIMINAL INVESTIGATION");
