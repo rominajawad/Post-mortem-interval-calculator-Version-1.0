@@ -5,6 +5,9 @@
 * return the object (makes it)
 */
 
+
+package com.example.Forensic.Calculator;
+
 public class deceasedBody {
     private String victimId;
     private double bodyTemp;
