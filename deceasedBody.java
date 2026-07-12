@@ -1,4 +1,4 @@
-/**
+/*
 *This class shows the characteristics of the object. Each dead body will be the object
 *
 * @param victimId, bodyTemp, ambientTemp, livorColor, isLivorFixed
