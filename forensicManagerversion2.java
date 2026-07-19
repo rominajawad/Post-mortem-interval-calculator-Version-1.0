@@ -1,4 +1,4 @@
-// version 2.0, shape(Columbia University)
+// version 2.0 at shape(Columbia University)
 
 
 package com.example.Forensic.Calculator;
@@ -29,13 +29,34 @@ This runs the while loop for an interactive menu
             int choice = scanner.nextInt();
             scanner.nextLine(); // Clear buffer
 
+            double a1,a2,b1,b2 // declare them at top so that they are created en if they hit a no!
             if (choice == 1) {
                 System.out.print("Enter victim Id: ");
                 String id = scanner.nextLine();
-                System.out.print("Enter body temperature: ");
-                double bTemp = scanner.nextDouble();
-                System.out.print("Enter Environmental Ambient Temperature (°C): ");
-                double aTemp = scanner.nextDouble();
+
+                System.out.print("Is body Temperature a range? (Yes/No): ");
+                boolean isRange= scanner.nextLine().equalsIgnoreCase("yes");
+
+
+                if(isRange){
+                System.out.print("Enter Min/Max Body temp: ");
+                    b1=scanner.nextDouble();
+                    b2=scanner.nextDouble();
+                } else{
+                b1=scanner.nextDouble();
+                b2=b1; // b2 becomes whatever b1 is and that is how it can contain the same value
+                }
+                
+                System.out.print("Is Ambient Temperature a range? (Yes/No): ");
+            
+                if(isRange){
+                System.out.print("Enter Min/Max Ambient Temp: ");
+                    a1=scanner.nextDouble();
+                    a2=scanner.nextDouble();
+                } else{
+                a1 = scanner.nextDouble();
+                a2=a1; // treat it as single value
+                }
                 scanner.nextLine();
                 System.out.print("Enter Lividity Discoloration Color: ");
                 String color = scanner.nextLine();
@@ -51,7 +72,7 @@ This runs the while loop for an interactive menu
                 System.out.print("-> Legs / Lower Body Stiffness Level: ");
                 rigor[2] = scanner.nextInt();
 
-                cases.add(new deceasedBody(id, bTemp, aTemp, color, fixed, rigor));
+                cases.add(new deceasedBody(id, b1,b2,a1,a2, color, fixed, rigor)); // creating an object
                 System.out.println("[SUCCESS] Case profile initialized and saved into memory.");
 
             } else if (choice == 2) {
@@ -76,20 +97,14 @@ This runs the while loop for an interactive menu
                         System.out.println("Target Profile ID: " + b.getVictimId());
                         System.out.println("--------------------------------------------------");
                         
-                        double algorHours = b.calculateAlgorMortisFor27(b.getBodyTemp());
-                        System.out.printf("Algor Mortis Calculus : %.2f hours post-mortem\n", algorHours);
+                        System.out.println("Algor Mortis Calculation: " + b.getAlgorMortisReport());// have this router method for variety
                         
-                        System.out.println("Livor Mortis Indicator: " + b.calculateLivorMortis(b.getIsLivorFixed()));
-                        System.out.println("Rigor Mortis Indicator: " + b.calculateRigorMortis(b.getRigorStage()));
+                        System.out.println("Livor Mortis Indicator: " + b.getLivorMortisReport());// for variety
                         
-                        System.out.println("FINAL CONVERGENCE CONCLUSION:");
-                        if (algorHours >= 2 && algorHours <= 6) {
-                            System.out.println(">> High probability convergence points to an EARLY death window: 2 to 6 hours ago.");
-                        } else if (algorHours > 12) {
-                            System.out.println(">> High probability convergence points to an EXTENDED timeline: 12+ hours ago.");
-                        } else {
-                            System.out.println(">> Evidence suggests an INTERMEDIATE post-mortem interval window.");
-                        }
+                        
+                        System.out.print("FINAL CONVERGENCE CONCLUSION: ");
+                        double finalHours= b.getFinalEstimateHours()
+                        System.out.println(">> Estimated time of death " + String.formate("%.2f", finalHours) + " hours ago")
                         System.out.println("Cross-reference scene temperature factors to establish localized modifications.");
                     }
                 }
@@ -115,23 +130,38 @@ This runs the while loop for an interactive menu
             
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine().trim();
-                if (line.isEmpty() || line.startsWith("//")) continue;
+                if (line.isEmpty() || line.startsWith("//")) 
+                    continue;
                 
                 String[] tokens = line.split(",");
-                String id = tokens[0];
-                double bTemp = Double.parseDouble(tokens[1]);
-                double aTemp = Double.parseDouble(tokens[2]);
-                String color = tokens[3];
-                boolean fixed = Boolean.parseBoolean(tokens[4]);
-                
-                int[] rigor = new int[3];
-                rigor[0] = Integer.parseInt(tokens[5]);
-                rigor[1] = Integer.parseInt(tokens[6]);
-                rigor[2] = Integer.parseInt(tokens[7]);
-                
-                cases.add(new deceasedBody(id, bTemp, aTemp, color, fixed, rigor));
-                System.out.println("-> Successfully pulled object metrics into memory for: " + id);
-            }
+                boolean isRange= Boolean.parseBoolean(token[0]); // sees if its boolean
+                String id = tokens[1];
+                int[] rigor= new int[3];
+
+                if(isRange){
+                double minB= Double.parseDouble(tokens[2]);
+                double maxB= Double.parseDouble(tokens[3]);
+                double minA= Double.parseDouble(tokens[4]);
+                double maxA= Double.parseDouble(tokens[5]);
+                String color= tokens[6];
+                boolean fixed= Boolean.parsedBoolean(tokens[7]);
+                rigor[0]=Integer.parseInt(tokens[8]);
+                rigor[1]=Integer.parseInt(tokens[9]);
+                rigor[2]=Integer.parseInt(tokens[10]);
+
+                cases.add(new deceasedBody(id, minB, maxB, minA, maxA, color, fixed, rigor));
+                } else{
+                 double bTemp= Double.parseDouble(tokens[2]);
+                 double aTemp= Double.parseDouble(tokens[3]);
+                 String color= tokens[4];
+                boolean fixed= Boolean.parseBoolean(tokens[5]);
+                rigor[0]= Integer.parseInt(tokens[6]);
+                rigor[1]= Integer.parseInt(tokens[7]);
+                rigor[2]= Integer.parseInt(tokens[8]);
+
+                cases.add(new deceasedBody(id, bTemp, aTemp, color, fixed, rigor))
+
+                }
             fileScanner.close();
             System.out.println("[SUCCESS] External data files parsed cleanly. Total profiles loaded: " + cases.size());
             
