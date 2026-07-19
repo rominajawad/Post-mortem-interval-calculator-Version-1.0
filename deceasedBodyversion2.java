@@ -124,12 +124,27 @@ return calculateAlgorMortisFor27(this.bodyTemp) + " hours";
 
 // creating an another getter for our range (router method)
 
-public String getLivorMortisReport(){
-if(this.isRange){
-return calculateLivorMortisRange(isLivorFixed, minH, maxH)
-}else{
-return calculateLivorMortis(fixed);
+public String getLivorMortisReport() {
+if (this.isRange) {
+return calculateLivorMortisRange(this.isLivorFixed, (int)this.bodyMinTemp, (int)this.bodyMaxTemp);
+} else {
+return calculateLivorMortis(this.isLivorFixed);
 }
+}
+
+// Final convergence method
+public double getFinalEstimateHours() {
+double algorEstimate;
+if (this.isRange) {
+algorEstimate = (37.0 - ((this.bodyMinTemp + this.bodyMaxTemp) / 2.0)) / 1.5;
+} else {
+algorEstimate = (37.0 - this.bodyTemp) / 1.5;
+}
+
+double livorEstimate = this.isLivorFixed ? 7.0 : 3.0;
+double rigorEstimate = (rigorStage[0] + rigorStage[1] + rigorStage[2]) * 2.0;
+
+return (algorEstimate + livorEstimate + rigorEstimate) / 3.0;
 }
 
 // Setters
