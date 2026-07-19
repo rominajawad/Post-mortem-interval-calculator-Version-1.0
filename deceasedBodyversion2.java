@@ -118,7 +118,7 @@ public String getAlgorMortisReport(){
 if(this.isRange){
 return calculateAlgorMortisRange(this.bodyMinTemp, this.bodyMaxTemp); // call the range one here
 } else{
-return String.valueOf(calculateAlgorMortisFor27(this.bodyTemp)) + " hours";
+return calculateAlgorMortisFor27(this.bodyTemp) + " hours";
 }
 }
 
@@ -128,7 +128,7 @@ public String getLivorMortisReport(){
 if(this.isRange){
 return calculateLivorMortisRange(isLivorFixed, minH, maxH)
 }else{
-return (calculateLivorMortis(fixed));
+return calculateLivorMortis(fixed);
 }
 }
 
