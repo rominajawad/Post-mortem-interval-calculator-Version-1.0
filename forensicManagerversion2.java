@@ -29,7 +29,7 @@ This runs the while loop for an interactive menu
             int choice = scanner.nextInt();
             scanner.nextLine(); // Clear buffer
 
-            double a1,a2,b1,b2 // declare them at top so that they are created en if they hit a no!
+            double a1,a2,b1,b2; // declare them at top so that they are created en if they hit a no!
             if (choice == 1) {
                 System.out.print("Enter victim Id: ");
                 String id = scanner.nextLine();
@@ -103,8 +103,8 @@ This runs the while loop for an interactive menu
                         
                         
                         System.out.print("FINAL CONVERGENCE CONCLUSION: ");
-                        double finalHours= b.getFinalEstimateHours()
-                        System.out.println(">> Estimated time of death " + String.formate("%.2f", finalHours) + " hours ago")
+                        double finalHours= b.getFinalEstimateHours();
+                        System.out.println(">> Estimated time of death " + String.formate("%.2f", finalHours) + " hours ago");
                         System.out.println("Cross-reference scene temperature factors to establish localized modifications.");
                     }
                 }
@@ -134,7 +134,7 @@ This runs the while loop for an interactive menu
                     continue;
                 
                 String[] tokens = line.split(",");
-                boolean isRange= Boolean.parseBoolean(token[0]); // sees if its boolean
+                boolean isRange= Boolean.parseBoolean(tokens[0]); // sees if its boolean
                 String id = tokens[1];
                 int[] rigor= new int[3];
 
