@@ -11,24 +11,42 @@ package com.example.Forensic.Calculator;
 public class deceasedBody {
 private String victimId;
 private double bodyTemp;
-private double minTemp // for range
-private double maxTemp // for range
+private double bodyMinTemp; // for range
+private double bodyMaxTemp; // for range
 private double ambientTemp;
+private double minAmbientTemp; // for range
+private double maxAmbientTemp; // for range
 private String livorColor;
 private boolean isLivorFixed;
 private int[] rigorStage;
+private boolean isRange; // to see if its a range or single value, making it easier for user to enter either a range or a single value
 
-public deceasedBody(String victimId, double maxTemp, double minTemp, double bodyTemp, double ambientTemp, String livorColor, boolean isLivorFixed, int[] rigorStage) {
+// Constructor for single values
+public deceasedBody(String victimId, double bodyTemp, double ambientTemp, String livorColor, boolean isLivorFixed, int[] rigorStage) {
 this.victimId = victimId;
 this.bodyTemp = bodyTemp;
-this.minTemp= minTemp // if no range, pass the same value
-this.maxTemp= maxTemp // if np rnage, pass the same value
 this.ambientTemp = ambientTemp;
 this.livorColor = livorColor;
 this.isLivorFixed = isLivorFixed;
 this.rigorStage = rigorStage;
+this.isRange= false;
 }
 
+// constructor for range of value
+public deceasedBody(String victimId, double bodyMinTemp, double bodyMaxTemp, double minAmbientTemp, double maxAmbientTemp, String livorColor, boolean isLivorFixed, int[] rigorStage)
+  {
+this.victimId= victimId;
+this.bodyMinTemp= bodyMinTemp;
+this.bodyMaxTemp= bodyMaxTemp;
+this.minAmbientTemp= minAmbientTemp;
+this.maxAmbientTemp= maxAmbientTemp;
+this.livorColor= livorColor;
+this.isLivorFixed= isLivorFixed;
+this.rigorStage= rigorStage;
+this.isRange= true;
+  }
+
+  
   // This is for a single individual value
     public double calculateAlgorMortisFor27(double targetTemp) {
         // Standard Glaister formula estimation framework
@@ -85,18 +103,48 @@ return "Rigor timeline estimation varies within the standard 6 to 15 hour window
 // Getters
 public String getVictimId() { return victimId; }
 public double getBodyTemp() { return bodyTemp; }
+public double getBodyMinTemp()  { return bodyMinTemp; }
+public double getBodyMaxTemp()  { return bodyMaxTemp; }
 public double getAmbientTemp() { return ambientTemp; }
+public double getMinAmbientTemp() { return minAmbientTemp; }
+public double getMaxAmbientTemp() {return maxAmbientTemp; }
 public String getLivorColor() { return livorColor; }
 public boolean getIsLivorFixed() { return isLivorFixed; }
 public int[] getRigorStage() { return rigorStage; }
 
+
+// Setters
+public void setVictimId(String newVictimId){victimId= newVictimId;}
+public void setBodyTemp(double newBodyTemp){bodyTemp= newBodyTemp; this.isRange= false; } // the value is single so its not a range
+public void setBodyMinTemp(double newBodyMinTemp){bodyMinTemp= newBodyMinTemp; this.isRange= true;} // if its a range, set the flag to true
+public void setBodyMaxTemp(double newBodyMaxTemp){bodyMaxTemp= newBodyMaxTemp; this.isRange=true;}// if its a range, set the flag to true
+public void setAmbientTemp(double newAmbientTemp){ambientTemp= newAmbientTemp; this.isRange= false;} // the value is single so its not a range
+public void setMinAmbientTemp(double newMinAmbientTemp){minAmbientTemp= newMinAmbientTemp; this.isRange=true;} // if its a range, set it to true
+public void setMaxAmbientTemp(double newMaxAmbientTemp){maxAmbientTemp= newMaxAmbientTemp; this.isRange=true;} // since its a range, set it to true
+public void setLivorColor(String newLivorColor){livorColor= newLivorColor;}
+public void setIsLivorFixed(boolean newIsLivorFixed){isLivorFixed= newIsLivorFixed;}
+public void setRigorStage(int newRigorStage){rigorStage= newRigorStage;}
+  
 @Override // leave it there since it wont crash
 public String toString() { // string representation of an object and thats why we are overriding
-return "Victim Id: " + victimId +
-"\n| body temperature: " + bodyTemp +
-"\n| ambient temperature: " + ambientTemp +
-"\n| Lividity: " + livorColor + " (fixed: " + isLivorFixed + ")" +
-"\n| rigor status: [" + rigorStage[0] + ", " + rigorStage[1] + ", " + rigorStage[2] + "]";
+String tempDisplay;
+String ambientDisplay;
+if(isRange){
+tempDisplay= bodyMinTemp + " to " + bodyMaxTemp;
+ambientDisplay= minAmbientTemp + " to " + maxAmbientTemp;
+} else {
+tempDisplay= String.valueOf(bodyTemp);
+ambientDisplay= String.valueOf(ambientTemp);
+}
+
+return "Victim Id : " + victimId+
+       "\n| Body Temperature: " + tempDisplay +
+       "\n| Ambient Temperature: " + ambientDisplay +
+       "\n| Lividity: " + livorColor + "(Fixed: " + isLivorFixed + ")" +
+       "\n| Rigor Status: [" + rigorStage[0] + ", " + rigorStage[1] + ", " + rigorStage[2] + "]";
+
+  
 }
 }
 
+// everytime we update the object, we need to switch the state if there is a boolean switch
