@@ -112,6 +112,25 @@ public String getLivorColor() { return livorColor; }
 public boolean getIsLivorFixed() { return isLivorFixed; }
 public int[] getRigorStage() { return rigorStage; }
 
+// creating a getter to get algor mortis calc based on if its single/range (router method)
+
+public String getAlgorMortisReport(){
+if(this.isRange){
+return calculateAlgorMortisRange(this.bodyMinTemp, this.bodyMaxTemp); // call the range one here
+} else{
+return String.valueOf(calculateAlgorMortisFor27(this.bodyTemp)) + " hours";
+}
+}
+
+// creating an another getter for our range (router method)
+
+public String getLivorMortisReport(){
+if(this.isRange){
+return calculateLivorMortisRange(isLivorFixed, minH, maxH)
+}else{
+return (calculateLivorMortis(fixed));
+}
+}
 
 // Setters
 public void setVictimId(String newVictimId){victimId= newVictimId;}
