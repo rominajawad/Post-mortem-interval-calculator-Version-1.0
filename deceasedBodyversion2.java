@@ -6,7 +6,7 @@
 */
 // version 2.0 at shape (columbia University)
 
-package com.example.Forensic.Calculator;
+
 
 public class deceasedBody {
 private String victimId;
