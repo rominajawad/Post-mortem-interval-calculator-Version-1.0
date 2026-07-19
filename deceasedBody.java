@@ -81,7 +81,7 @@ This method is for calculating livor mortis
         return "estimation stage varies between 6 to 15 hours";
     }
 
-    @Override
+    @Override // we dont have to write this, this just helps it not to crash if we have small syntax error
     public String toString() {
         return "Victim Id: " + victimId + 
                "\n| body temperature: " + bodyTemp + 
