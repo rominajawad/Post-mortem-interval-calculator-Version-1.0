@@ -11,41 +11,61 @@ package com.example.Forensic.Calculator;
 public class deceasedBody {
 private String victimId;
 private double bodyTemp;
+private double minTemp // for range
+private double maxTemp // for range
 private double ambientTemp;
 private String livorColor;
 private boolean isLivorFixed;
 private int[] rigorStage;
 
-public deceasedBody(String victimId, double bodyTemp, double ambientTemp, String livorColor, boolean isLivorFixed, int[] rigorStage) {
+public deceasedBody(String victimId, double maxTemp, double minTemp, double bodyTemp, double ambientTemp, String livorColor, boolean isLivorFixed, int[] rigorStage) {
 this.victimId = victimId;
 this.bodyTemp = bodyTemp;
+this.minTemp= minTemp // if no range, pass the same value
+this.maxTemp= maxTemp // if np rnage, pass the same value
 this.ambientTemp = ambientTemp;
 this.livorColor = livorColor;
 this.isLivorFixed = isLivorFixed;
 this.rigorStage = rigorStage;
 }
 
-// --- UNIVERSAL CALCULATORS (Handles Single Values & Ranges) ---
+  // This is for a single individual value
+    public double calculateAlgorMortisFor27(double targetTemp) {
+        // Standard Glaister formula estimation framework
+        return (37.0 - bodyTemp) / 1.5; 
+    }
+
+// --- Handles Range for algor mortis ---
 
 // Algor Mortis: Returns a range string
-public String calculateAlgorMortis(double minTemp, double maxTemp) {
+public String calculateAlgorMortisRange(double minTemp, double maxTemp) {
 double lowTime = (37.0 - maxTemp) / 1.5;
 double highTime = (37.0 - minTemp) / 1.5;
 if (lowTime == highTime) {
-return String.format("%.2f hours", lowTime);
+return lowTime + " hours";
 }
-return String.format("%.2f to %.2f hours", lowTime, highTime);
+return lowTime + " to " + highTime + " hours";
 }
 
+// this is for single values
+  public String calculateLivorMortis(boolean fixed) {
+        if (fixed) {
+            return "At least 6 to 8 hours ago (lividity is permanent)";
+        } else {
+            return "less than 6 hours ago(lividity is temporary)";
+        }
+    }
+
+  
 // Livor Mortis: Returns a range string (Handles 'fixed' state as priority)
-public String calculateLivorMortis(boolean isFixed, int minHours, int maxHours) {
+public String calculateLivorMortisRange(boolean isFixed, int minH, int maxH) {
 if (isFixed) {
 return "At least 6 to 8 hours (Permanent)";
 }
-if (minHours == maxHours) {
-return String.format("%d hours (Temporary)", minHours);
+if (minH == maxH) {
+return minH + " hours (Temporary)";
 }
-return String.format("%d to %d hours (Temporary)", minHours, maxHours);
+return minH + " to " + maxH + " hours (Temporary) ";
 }
 
 // Rigor Mortis Estimation
@@ -70,8 +90,8 @@ public String getLivorColor() { return livorColor; }
 public boolean getIsLivorFixed() { return isLivorFixed; }
 public int[] getRigorStage() { return rigorStage; }
 
-@Override
-public String toString() {
+@Override // leave it there since it wont crash
+public String toString() { // string representation of an object and thats why we are overriding
 return "Victim Id: " + victimId +
 "\n| body temperature: " + bodyTemp +
 "\n| ambient temperature: " + ambientTemp +
