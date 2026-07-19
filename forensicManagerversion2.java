@@ -1,7 +1,5 @@
 // version 2.0 at shape(Columbia University)
 
-
-package com.example.Forensic.Calculator;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.File;
