@@ -102,7 +102,7 @@ This runs the while loop for an interactive menu
                         
                         System.out.print("FINAL CONVERGENCE CONCLUSION: ");
                         double finalHours= b.getFinalEstimateHours();
-                        System.out.println(">> Estimated time of death " + String.formate("%.2f", finalHours) + " hours ago");
+                        System.out.println(">> Estimated time of death " + String.format("%.2f", finalHours) + " hours ago");
                         System.out.println("Cross-reference scene temperature factors to establish localized modifications.");
                     }
                 }
