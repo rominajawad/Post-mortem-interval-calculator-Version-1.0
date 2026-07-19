@@ -144,7 +144,7 @@ This runs the while loop for an interactive menu
                 double minA= Double.parseDouble(tokens[4]);
                 double maxA= Double.parseDouble(tokens[5]);
                 String color= tokens[6];
-                boolean fixed= Boolean.parsedBoolean(tokens[7]);
+                boolean fixed= Boolean.parseBoolean(tokens[7]);
                 rigor[0]=Integer.parseInt(tokens[8]);
                 rigor[1]=Integer.parseInt(tokens[9]);
                 rigor[2]=Integer.parseInt(tokens[10]);
@@ -159,8 +159,8 @@ This runs the while loop for an interactive menu
                 rigor[1]= Integer.parseInt(tokens[7]);
                 rigor[2]= Integer.parseInt(tokens[8]);
 
-                cases.add(new deceasedBody(id, bTemp, aTemp, color, fixed, rigor))
-
+                cases.add(new deceasedBody(id, bTemp, aTemp, color, fixed, rigor));
+                }
                 }
             fileScanner.close();
             System.out.println("[SUCCESS] External data files parsed cleanly. Total profiles loaded: " + cases.size());
@@ -171,4 +171,4 @@ This runs the while loop for an interactive menu
             System.out.println("[ERROR] Formatting structure exception encountered inside the external data file.");
         }
     }
-}
+
