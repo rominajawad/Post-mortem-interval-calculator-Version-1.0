@@ -19,8 +19,9 @@ private double maxAmbientTemp; // for range
 private String livorColor;
 private boolean isLivorFixed;
 private int[] rigorStage;
-private boolean isRange; // to see if its a range or single value, making it easier for user to enter either a range or a single value
-
+private boolean isBodyTempRange; // to see if its a range or single value, making it easier for user to enter either a range or a single value
+private boolean isAmbientTempRange;
+  
 // Constructor for single values
 public deceasedBody(String victimId, double bodyTemp, double ambientTemp, String livorColor, boolean isLivorFixed, int[] rigorStage) {
 this.victimId = victimId;
@@ -29,7 +30,8 @@ this.ambientTemp = ambientTemp;
 this.livorColor = livorColor;
 this.isLivorFixed = isLivorFixed;
 this.rigorStage = rigorStage;
-this.isRange= false;
+this.isBodyTempRange= false;
+this.isAmbientTempRange= false;
 }
 
 // constructor for range of value
@@ -43,14 +45,15 @@ this.maxAmbientTemp= maxAmbientTemp;
 this.livorColor= livorColor;
 this.isLivorFixed= isLivorFixed;
 this.rigorStage= rigorStage;
-this.isRange= true;
+this.isBodyTempRange= true;
+this.isAmbientTempRange= true;
   }
 
   
   // This is for a single individual value
     public double calculateAlgorMortisFor27(double targetTemp) {
         // Standard Glaister formula estimation framework
-        return (37.0 - bodyTemp) / 1.5; 
+        return (37.0 - targetTemp) / 1.5; 
     }
 
 // --- Handles Range for algor mortis ---
@@ -74,16 +77,8 @@ return lowTime + " to " + highTime + " hours";
         }
     }
 
-  
-// Livor Mortis: Returns a range string (Handles 'fixed' state as priority)
-public String calculateLivorMortisRange(boolean isFixed, int minH, int maxH) {
-if (isFixed) {
-return "At least 6 to 8 hours (Permanent)";
-}
-if (minH == maxH) {
-return minH + " hours (Temporary)";
-}
-return minH + " to " + maxH + " hours (Temporary) ";
+public String getLivorMortisReport() {
+    return calculateLivorMortis(this.isLivorFixed);
 }
 
 // Rigor Mortis Estimation
@@ -115,69 +110,99 @@ public int[] getRigorStage() { return rigorStage; }
 // creating a getter to get algor mortis calc based on if its single/range (router method)
 
 public String getAlgorMortisReport(){
-if(this.isRange){
+if(this.isBodyTempRange){
 return calculateAlgorMortisRange(this.bodyMinTemp, this.bodyMaxTemp); // call the range one here
 } else{
 return calculateAlgorMortisFor27(this.bodyTemp) + " hours";
 }
 }
 
-// creating an another getter for our range (router method)
-
-public String getLivorMortisReport() {
-if (this.isRange) {
-return calculateLivorMortisRange(this.isLivorFixed, (int)this.bodyMinTemp, (int)this.bodyMaxTemp);
-} else {
-return calculateLivorMortis(this.isLivorFixed);
+public String getRigorMortisReport(){
+  return calculateRigorMortis(rigorStage[0], rigorStage[2]);
 }
-}
-
+  
 // Final convergence method
 public double getFinalEstimateHours() {
-double algorEstimate;
-if (this.isRange) {
-algorEstimate = (37.0 - ((this.bodyMinTemp + this.bodyMaxTemp) / 2.0)) / 1.5;
-} else {
-algorEstimate = (37.0 - this.bodyTemp) / 1.5;
-}
 
-double livorEstimate = this.isLivorFixed ? 7.0 : 3.0;
-double rigorEstimate = (rigorStage[0] + rigorStage[1] + rigorStage[2]) * 2.0;
+    double algorEstimate;
 
-return (algorEstimate + livorEstimate + rigorEstimate) / 3.0;
+    if (this.isBodyTempRange) {
+        algorEstimate = (37.0 - ((this.bodyMinTemp + this.bodyMaxTemp) / 2.0)) / 1.5;
+    } 
+    else {
+        algorEstimate = (37.0 - this.bodyTemp) / 1.5;
+    }
+
+
+    double livorEstimate = this.isLivorFixed ? 7.0 : 3.0;
+
+
+    double rigorEstimate;
+
+    int minStage = rigorStage[0];
+    int maxStage = rigorStage[2];
+
+    if(minStage == 3 && maxStage == 3){
+        rigorEstimate = 12.0;
+    }
+    else if(minStage == 1 && maxStage == 1){
+        rigorEstimate = 4.0;
+    }
+    else if(minStage == 2 && maxStage == 3){
+        rigorEstimate = 9.0;
+    }
+    else if(minStage == 0 && maxStage == 0){
+        rigorEstimate = 2.0;
+    }
+    else{
+        rigorEstimate = 8.0;
+    }
+
+
+    return (algorEstimate + livorEstimate + rigorEstimate) / 3.0;
 }
 
 // Setters
 public void setVictimId(String newVictimId){victimId= newVictimId;}
-public void setBodyTemp(double newBodyTemp){bodyTemp= newBodyTemp; this.isRange= false; } // the value is single so its not a range
-public void setBodyMinTemp(double newBodyMinTemp){bodyMinTemp= newBodyMinTemp; this.isRange= true;} // if its a range, set the flag to true
-public void setBodyMaxTemp(double newBodyMaxTemp){bodyMaxTemp= newBodyMaxTemp; this.isRange=true;}// if its a range, set the flag to true
-public void setAmbientTemp(double newAmbientTemp){ambientTemp= newAmbientTemp; this.isRange= false;} // the value is single so its not a range
-public void setMinAmbientTemp(double newMinAmbientTemp){minAmbientTemp= newMinAmbientTemp; this.isRange=true;} // if its a range, set it to true
-public void setMaxAmbientTemp(double newMaxAmbientTemp){maxAmbientTemp= newMaxAmbientTemp; this.isRange=true;} // since its a range, set it to true
+public void setBodyTemp(double newBodyTemp){bodyTemp= newBodyTemp; this.isBodyTempRange= false; } // the value is single so its not a range
+public void setBodyMinTemp(double newBodyMinTemp){bodyMinTemp= newBodyMinTemp; this.isBodyTempRange= true;} // if its a range, set the flag to true
+public void setBodyMaxTemp(double newBodyMaxTemp){bodyMaxTemp= newBodyMaxTemp; this.isBodyTempRange=true;}// if its a range, set the flag to true
+public void setAmbientTemp(double newAmbientTemp){ambientTemp= newAmbientTemp; this.isAmbientTempRange= false;} // the value is single so its not a range
+public void setMinAmbientTemp(double newMinAmbientTemp){minAmbientTemp= newMinAmbientTemp; this.isAmbientTempRange=true;} // if its a range, set it to true
+public void setMaxAmbientTemp(double newMaxAmbientTemp){maxAmbientTemp= newMaxAmbientTemp; this.isAmbientTempRange=true;} // since its a range, set it to true
 public void setLivorColor(String newLivorColor){livorColor= newLivorColor;}
 public void setIsLivorFixed(boolean newIsLivorFixed){isLivorFixed= newIsLivorFixed;}
-public void setRigorStage(int newRigorStage){rigorStage= newRigorStage;}
+public void setRigorStage(int[] newRigorStage){rigorStage= newRigorStage;}
   
-@Override // leave it there since it wont crash
-public String toString() { // string representation of an object and thats why we are overriding
+@Override // you dont need an override, it just stop syntax error from crashing
+public String toString() {
+
 String tempDisplay;
 String ambientDisplay;
-if(isRange){
-tempDisplay= bodyMinTemp + " to " + bodyMaxTemp;
-ambientDisplay= minAmbientTemp + " to " + maxAmbientTemp;
-} else {
-tempDisplay= String.valueOf(bodyTemp);
-ambientDisplay= String.valueOf(ambientTemp);
+
+if(isBodyTempRange){
+    tempDisplay = bodyMinTemp + " to " + bodyMaxTemp;
+}
+else{
+    tempDisplay = String.valueOf(bodyTemp);
+}
+
+if(isAmbientTempRange){
+    ambientDisplay = minAmbientTemp + " to " + maxAmbientTemp;
+}
+else{
+    ambientDisplay = String.valueOf(ambientTemp);
 }
 
 return "Victim Id : " + victimId+
        "\n| Body Temperature: " + tempDisplay +
        "\n| Ambient Temperature: " + ambientDisplay +
-       "\n| Lividity: " + livorColor + "(Fixed: " + isLivorFixed + ")" +
-       "\n| Rigor Status: [" + rigorStage[0] + ", " + rigorStage[1] + ", " + rigorStage[2] + "]";
-
-  
+       "\n| Lividity: " + livorColor + " (Fixed: " + isLivorFixed + ")" +
+       "\n| Rigor Status: [" + rigorStage[0] + ", " + rigorStage[1] + ", " + rigorStage[2] + "]" +
+       "\n| Algor Mortis Estimate: " + getAlgorMortisReport() +
+       "\n| Livor Mortis Estimate: " + getLivorMortisReport() +
+       "\n| Rigor Mortis Estimate: " + getRigorMortisReport() +
+       "\n| Final PMI Estimate: " + String.format("%.2f", getFinalEstimateHours()) + " hours ago";
 }
 }
 
