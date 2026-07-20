@@ -29,33 +29,36 @@ This runs the while loop for an interactive menu
 
             double a1,a2,b1,b2; // declare them at top so that they are created en if they hit a no!
             if (choice == 1) {
-                System.out.print("Enter victim Id: ");
+                System.out.println("Enter victim Id: ");
                 String id = scanner.nextLine();
 
-                System.out.print("Is body Temperature a range? (Yes/No): ");
+                System.out.println("Is body Temperature a range? (Yes/No): ");
                 boolean isRange= scanner.nextLine().equalsIgnoreCase("yes");
 
 
                 if(isRange){
-                System.out.print("Enter Min/Max Body temp: ");
+                System.out.println("Enter Min/Max Body temp: ");
                     b1=scanner.nextDouble();
                     b2=scanner.nextDouble();
                 } else{
                 b1=scanner.nextDouble();
                 b2=b1; // b2 becomes whatever b1 is and that is how it can contain the same value
                 }
+
+                scanner.nextLine();
                 
-                System.out.print("Is Ambient Temperature a range? (Yes/No): ");
+                System.out.println("Is Ambient Temperature a range? (Yes/No): ");
+                boolean ambientRange = scanner.nextLine().equalsIgnoreCase("yes");
             
-                if(isRange){
-                System.out.print("Enter Min/Max Ambient Temp: ");
+                if(ambientRange){
+                System.out.println("Enter Min/Max Ambient Temp: ");
                     a1=scanner.nextDouble();
                     a2=scanner.nextDouble();
                 } else{
                 a1 = scanner.nextDouble();
                 a2=a1; // treat it as single value
                 }
-                scanner.nextLine();
+               
                 System.out.print("Enter Lividity Discoloration Color: ");
                 String color = scanner.nextLine();
                 System.out.print("Is Lividity Fixed/Permanent? (true/false): ");
@@ -70,7 +73,15 @@ This runs the while loop for an interactive menu
                 System.out.print("-> Legs / Lower Body Stiffness Level: ");
                 rigor[2] = scanner.nextInt();
 
-                cases.add(new deceasedBody(id, b1,b2,a1,a2, color, fixed, rigor)); // creating an object
+ if(isRange && ambientRange){
+    cases.add(new deceasedBody(id, b1, b2, a1, a2, color, fixed, rigor));
+}
+else if(!isRange && !ambientRange){
+    cases.add(new deceasedBody(id, b1, a1, color, fixed, rigor));
+}
+else{
+    System.out.println("[WARNING] Mixed temperature ranges are not supported yet.");
+}
                 System.out.println("[SUCCESS] Case profile initialized and saved into memory.");
 
             } else if (choice == 2) {
@@ -98,6 +109,8 @@ This runs the while loop for an interactive menu
                         System.out.println("Algor Mortis Calculation: " + b.getAlgorMortisReport());// have this router method for variety
                         
                         System.out.println("Livor Mortis Indicator: " + b.getLivorMortisReport());// for variety
+
+                        System.out.println(" Rigor Mortis indicator: " + b.getRigorMortisReport());
                         
                         
                         System.out.print("FINAL CONVERGENCE CONCLUSION: ");
