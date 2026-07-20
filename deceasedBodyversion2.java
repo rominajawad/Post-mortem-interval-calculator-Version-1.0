@@ -8,7 +8,7 @@
 
 
 
-public class deceasedBody {
+public class deceasedBody { 
 private String victimId;
 private double bodyTemp;
 private double bodyMinTemp; // for range
@@ -22,7 +22,7 @@ private int[] rigorStage;
 private boolean isBodyTempRange; // to see if its a range or single value, making it easier for user to enter either a range or a single value
 private boolean isAmbientTempRange;
   
-// Constructor for single values
+// Constructor for single values // either both values for body and ambient temp are single
 public deceasedBody(String victimId, double bodyTemp, double ambientTemp, String livorColor, boolean isLivorFixed, int[] rigorStage) {
 this.victimId = victimId;
 this.bodyTemp = bodyTemp;
@@ -34,7 +34,7 @@ this.isBodyTempRange= false;
 this.isAmbientTempRange= false;
 }
 
-// constructor for range of value
+// constructor for range of value for both
 public deceasedBody(String victimId, double bodyMinTemp, double bodyMaxTemp, double minAmbientTemp, double maxAmbientTemp, String livorColor, boolean isLivorFixed, int[] rigorStage)
   {
 this.victimId= victimId;
@@ -49,6 +49,8 @@ this.isBodyTempRange= true;
 this.isAmbientTempRange= true;
   }
 
+// create constructors for both single and range (so create two more so that wide variety of data is supported)
+  
   
   // This is for a single individual value
     public double calculateAlgorMortisFor27(double targetTemp) {
