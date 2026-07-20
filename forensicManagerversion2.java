@@ -41,6 +41,7 @@ This runs the while loop for an interactive menu
                     b1=scanner.nextDouble();
                     b2=scanner.nextDouble();
                 } else{
+                System.out.println("Enter Body Temperature: ");
                 b1=scanner.nextDouble();
                 b2=b1; // b2 becomes whatever b1 is and that is how it can contain the same value
                 }
@@ -55,13 +56,16 @@ This runs the while loop for an interactive menu
                     a1=scanner.nextDouble();
                     a2=scanner.nextDouble();
                 } else{
+                System.out.println("Enter Ambient Temperature: ");
                 a1 = scanner.nextDouble();
                 a2=a1; // treat it as single value
                 }
                
-                System.out.print("Enter Lividity Discoloration Color: ");
+               scanner.nextLine();
+               
+                System.out.println("Enter Lividity Discoloration Color: ");
                 String color = scanner.nextLine();
-                System.out.print("Is Lividity Fixed/Permanent? (true/false): ");
+                System.out.println("Is Lividity Fixed/Permanent? (true/false): ");
                 boolean fixed = scanner.nextBoolean();
 
                 System.out.println("Enter Rigor Stiffness Levels (0 = Relaxed, 3 = Completely Rigid):");
@@ -72,6 +76,7 @@ This runs the while loop for an interactive menu
                 rigor[1] = scanner.nextInt();
                 System.out.print("-> Legs / Lower Body Stiffness Level: ");
                 rigor[2] = scanner.nextInt();
+                scanner.nextLine();
 
  if(isRange && ambientRange){
     cases.add(new deceasedBody(id, b1, b2, a1, a2, color, fixed, rigor));
@@ -145,6 +150,10 @@ else{
                     continue;
                 
                 String[] tokens = line.split(",");
+
+                for(int i = 0; i < tokens.length; i++){
+                tokens[i] = tokens[i].trim(); 
+                }
                 boolean isRange= Boolean.parseBoolean(tokens[0]); // sees if its boolean
                 String id = tokens[1];
                 int[] rigor= new int[3];
