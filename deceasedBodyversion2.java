@@ -55,7 +55,11 @@ this.isAmbientTempRange= true;
   // This is for a single individual value
     public double calculateAlgorMortisFor27(double targetTemp) {
         // Standard Glaister formula estimation framework
-        return (37.0 - targetTemp) / 1.5; 
+        double hours= (37.0 - targetTemp) / 1.5; 
+        if(hours<0){
+            hours=0;
+        }
+        return hours;
     }
 
 // --- Handles Range for algor mortis ---
@@ -64,9 +68,14 @@ this.isAmbientTempRange= true;
 public String calculateAlgorMortisRange(double minTemp, double maxTemp) {
 double lowTime = (37.0 - maxTemp) / 1.5;
 double highTime = (37.0 - minTemp) / 1.5;
+
+if (lowTime < 0) lowTime = 0;
+if (highTime < 0) highTime = 0;
+
 if (lowTime == highTime) {
-return lowTime + " hours";
+    return lowTime + " hours";
 }
+
 return lowTime + " to " + highTime + " hours";
 }
 
@@ -93,6 +102,8 @@ return "Either very recent (0-2 hours) OR completely resolved (36-48 hours)";
 }
 if (minStage == 1 && maxStage == 1) return "Rigor is beginning (2 to 6 hours ago)";
 if (minStage == 2 && maxStage == 3) return "Rigor is advancing (6 to 12 hours ago)";
+if(minStage == 2 && maxStage == 2)
+    return "Rigor is advancing (6 to 12 hours ago)";
 
 return "Rigor timeline estimation varies within the standard 6 to 15 hour window";
 }
@@ -119,8 +130,9 @@ return calculateAlgorMortisFor27(this.bodyTemp) + " hours";
 }
 }
 
-public String getRigorMortisReport(){
-  return calculateRigorMortis(rigorStage[0], rigorStage[2]);
+public String getRigorMortisReport() {
+    int averageStage = (rigorStage[0] + rigorStage[1] + rigorStage[2]) / 3;
+    return calculateRigorMortis(averageStage, averageStage);
 }
   
 // Final convergence method
@@ -134,31 +146,29 @@ public double getFinalEstimateHours() {
     else {
         algorEstimate = (37.0 - this.bodyTemp) / 1.5;
     }
-
+    if(algorEstimate < 0){
+    algorEstimate = 0;
+    }
 
     double livorEstimate = this.isLivorFixed ? 7.0 : 3.0;
 
 
     double rigorEstimate;
 
-    int minStage = rigorStage[0];
-    int maxStage = rigorStage[2];
+    int averageStage = (rigorStage[0] + rigorStage[1] + rigorStage[2]) / 3;
 
-    if(minStage == 3 && maxStage == 3){
-        rigorEstimate = 12.0;
-    }
-    else if(minStage == 1 && maxStage == 1){
-        rigorEstimate = 4.0;
-    }
-    else if(minStage == 2 && maxStage == 3){
-        rigorEstimate = 9.0;
-    }
-    else if(minStage == 0 && maxStage == 0){
-        rigorEstimate = 2.0;
-    }
-    else{
-        rigorEstimate = 8.0;
-    }
+    if (averageStage == 3) {
+    rigorEstimate = 12.0;
+}
+else if (averageStage == 2) {
+    rigorEstimate = 9.0;
+}
+else if (averageStage == 1) {
+    rigorEstimate = 4.0;
+}
+else {
+    rigorEstimate = 2.0;
+}
 
 
     return (algorEstimate + livorEstimate + rigorEstimate) / 3.0;
@@ -201,11 +211,6 @@ return "Victim Id : " + victimId+
        "\n| Ambient Temperature: " + ambientDisplay +
        "\n| Lividity: " + livorColor + " (Fixed: " + isLivorFixed + ")" +
        "\n| Rigor Status: [" + rigorStage[0] + ", " + rigorStage[1] + ", " + rigorStage[2] + "]" +
-       "\n| Algor Mortis Estimate: " + getAlgorMortisReport() +
-       "\n| Livor Mortis Estimate: " + getLivorMortisReport() +
-       "\n| Rigor Mortis Estimate: " + getRigorMortisReport() +
-       "\n| Final PMI Estimate: " + String.format("%.2f", getFinalEstimateHours()) + " hours ago";
-}
 }
 
 // everytime we update the object, we need to switch the state if there is a boolean switch
