@@ -32,10 +32,9 @@ This runs the while loop for an interactive menu
                 System.out.println("Enter victim Id: ");
                 String id = scanner.nextLine();
 
-                System.out.println("Is body Temperature a range? (Yes/No): ");
+                System.out.println("Enter the body temperature. (Not sure?) ");
                 boolean isRange= scanner.nextLine().equalsIgnoreCase("yes");
-
-
+                    
                 if(isRange){
                 System.out.println("Enter Min/Max Body temp: ");
                     b1=scanner.nextDouble();
@@ -48,7 +47,7 @@ This runs the while loop for an interactive menu
 
                 scanner.nextLine();
                 
-                System.out.println("Is Ambient Temperature a range? (Yes/No): ");
+                System.out.println("Enter the ambient temperature. (Not sure?) ");
                 boolean ambientRange = scanner.nextLine().equalsIgnoreCase("yes");
             
                 if(ambientRange){
@@ -78,14 +77,10 @@ This runs the while loop for an interactive menu
                 rigor[2] = scanner.nextInt();
                 scanner.nextLine();
 
- if(isRange && ambientRange){
-    cases.add(new deceasedBody(id, b1, b2, a1, a2, color, fixed, rigor));
-}
-else if(!isRange && !ambientRange){
-    cases.add(new deceasedBody(id, b1, a1, color, fixed, rigor));
-}
-else{
-    System.out.println("[WARNING] Mixed temperature ranges are not supported yet.");
+If ((isRange && ambientRange) or (!isRange&& !ambientRange)){
+Cases.add(new deceasedBody(id,b1,b2,a1,a2,color, fixed, rigor))
+} else {
+Cases.add(new deceasedBody(id,b1,b2,a1,a2,color, fixed, rigot))
 }
                 System.out.println("[SUCCESS] Case profile initialized and saved into memory.");
 
@@ -107,15 +102,15 @@ else{
                 } else {
                     System.out.println("==================================================");
                     System.out.println("COMPREHENSIVE PMO ANALYSIS REPORT");
-                    for (deceasedBody b : cases) {
+                    for (deceasedBody b : cases) { // going through the cases and placing the object in a variable called 'b'
                         System.out.println("Target Profile ID: " + b.getVictimId());
                         System.out.println("--------------------------------------------------");
                         
                         System.out.println("Algor Mortis Calculation: " + b.getAlgorMortisReport());// have this router method for variety
                         
-                        System.out.println("Livor Mortis Indicator: " + b.getLivorMortisReport());// for variety
+                        System.out.println("Livor Mortis Indicator: " + b.getLivorMortisReport());// for variety (the router method)
 
-                        System.out.println(" Rigor Mortis indicator: " + b.getRigorMortisReport());
+                        System.out.println(" Rigor Mortis indicator: " + b.getRigorMortisReport()); // same thing
                         
                         
                         System.out.print("FINAL CONVERGENCE CONCLUSION: ");
@@ -126,8 +121,8 @@ else{
                 }
 
             } else if (choice == 4) {
-                System.out.println("Shutting down forensic system. Have a great day!");
-                break;
+                System.out.println("Forensic calculator is shutting down. Have a great day!");
+                break; // if 4 then immediately exit
 
             } else if (choice == 5) {
                 loadCasesFromFile("cases.txt", cases);
