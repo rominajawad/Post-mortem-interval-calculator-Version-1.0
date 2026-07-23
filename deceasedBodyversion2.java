@@ -22,31 +22,22 @@ private int[] rigorStage;
 private boolean isBodyTempRange; // to see if its a range or single value, making it easier for user to enter either a range or a single value
 private boolean isAmbientTempRange;
   
-// Constructor for single values // either both values for body and ambient temp are single
-public deceasedBody(String victimId, double bodyTemp, double ambientTemp, String livorColor, boolean isLivorFixed, int[] rigorStage) {
-this.victimId = victimId;
-this.bodyTemp = bodyTemp;
-this.ambientTemp = ambientTemp;
-this.livorColor = livorColor;
-this.isLivorFixed = isLivorFixed;
-this.rigorStage = rigorStage;
-this.isBodyTempRange= false;
-this.isAmbientTempRange= false;
-}
 
-// constructor for range of value for both
-public deceasedBody(String victimId, double bodyMinTemp, double bodyMaxTemp, double minAmbientTemp, double maxAmbientTemp, String livorColor, boolean isLivorFixed, int[] rigorStage)
+public deceasedBody(String victimId, double bodyTemp, double bodyMinTemp, double bodyMaxTemp,double ambientTemp, double minAmbientTemp, double maxAmbientTemp, String livorColor, boolean isLivorFixed, int[] rigorStage,
+    boolean isBodyTempRange, boolean isAmbientTempRange )
   {
 this.victimId= victimId;
+this.bodyTemp= bodyTemp;
 this.bodyMinTemp= bodyMinTemp;
 this.bodyMaxTemp= bodyMaxTemp;
+this.ambientTemp= ambientTemp;
 this.minAmbientTemp= minAmbientTemp;
 this.maxAmbientTemp= maxAmbientTemp;
 this.livorColor= livorColor;
 this.isLivorFixed= isLivorFixed;
 this.rigorStage= rigorStage;
-this.isBodyTempRange= true;
-this.isAmbientTempRange= true;
+this.isBodyTempRange= isBodyTempRange;
+this.isAmbientTempRange= isAmbientTempRange;
   }
 
 // create constructors for both single and range (so create two more so that wide variety of data is supported)
@@ -210,7 +201,7 @@ return "Victim Id : " + victimId+
        "\n| Body Temperature: " + tempDisplay +
        "\n| Ambient Temperature: " + ambientDisplay +
        "\n| Lividity: " + livorColor + " (Fixed: " + isLivorFixed + ")" +
-       "\n| Rigor Status: [" + rigorStage[0] + ", " + rigorStage[1] + ", " + rigorStage[2] + "]" +
+       "\n| Rigor Status: [" + rigorStage[0] + ", " + rigorStage[1] + ", " + rigorStage[2] + "]" ;
 }
 
 // everytime we update the object, we need to switch the state if there is a boolean switch
