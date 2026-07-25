@@ -40,7 +40,7 @@ this.isBodyTempRange= isBodyTempRange;
 this.isAmbientTempRange= isAmbientTempRange;
   }
 
-// create constructors for both single and range (so create two more so that wide variety of data is supported)
+// ↑ created constructors for both single and range (so create two more so that wide variety of data is supported)
   
   
   // This is for a single individual value
