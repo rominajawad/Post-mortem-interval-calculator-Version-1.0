@@ -26,6 +26,9 @@ private boolean isAmbientTempRange;
 public deceasedBody(String victimId, double bodyTemp, double bodyMinTemp, double bodyMaxTemp,double ambientTemp, double minAmbientTemp, double maxAmbientTemp, String livorColor, boolean isLivorFixed, int[] rigorStage,
     boolean isBodyTempRange, boolean isAmbientTempRange )
   {
+if(rigorStage == null || rigorStage.length<3){
+Throw new illegalArgumentException("The values should contain exactly three values.");
+}
 this.victimId= victimId;
 this.bodyTemp= bodyTemp;
 this.bodyMinTemp= bodyMinTemp;
@@ -167,17 +170,28 @@ else {
 
 // Setters
 public void setVictimId(String newVictimId){victimId= newVictimId;}
-public void setBodyTemp(double newBodyTemp){bodyTemp= newBodyTemp; this.isBodyTempRange= false; } // the value is single so its not a range
-public void setBodyMinTemp(double newBodyMinTemp){bodyMinTemp= newBodyMinTemp; this.isBodyTempRange= true;} // if its a range, set the flag to true
-public void setBodyMaxTemp(double newBodyMaxTemp){bodyMaxTemp= newBodyMaxTemp; this.isBodyTempRange=true;}// if its a range, set the flag to true
-public void setAmbientTemp(double newAmbientTemp){ambientTemp= newAmbientTemp; this.isAmbientTempRange= false;} // the value is single so its not a range
-public void setMinAmbientTemp(double newMinAmbientTemp){minAmbientTemp= newMinAmbientTemp; this.isAmbientTempRange=true;} // if its a range, set it to true
-public void setMaxAmbientTemp(double newMaxAmbientTemp){maxAmbientTemp= newMaxAmbientTemp; this.isAmbientTempRange=true;} // since its a range, set it to true
+public void setBodyTemp(double newBodyTemp){
+bodyTemp= newBodyTemp; 
+this.isBodyTempRange= false; } // the value is single so its not a range
+public void setBodyTemp(double bodyMinTemp, double bodyMaxTemp){
+this.bodyMinTemp= bodyMinTemp;
+this.bodyMaxTemp= bodyMaxTemp;
+this.isBodyTempRange=true;
+}
+public void setAmbientTemp(double newAmbientTemp){
+ambientTemp= newAmbientTemp;
+ this.isAmbientTempRange= false;} // the value is single so its not a range
+public void setAmbientTemp(double minAmbientTemp, double maxAmbientTemp){
+this.minAmbientTemp= minAmbientTemp;
+this.maxAmbientTemp= maxAmbientTemp;
+this.isAmbientTempRange= true;
+}
+
 public void setLivorColor(String newLivorColor){livorColor= newLivorColor;}
 public void setIsLivorFixed(boolean newIsLivorFixed){isLivorFixed= newIsLivorFixed;}
 public void setRigorStage(int[] newRigorStage){rigorStage= newRigorStage;}
   
-@Override // you dont need an override, it just stop syntax error from crashing
+@Override // The compiler reports an error if this doesn't actually override a superclass method.
 public String toString() {
 
 String tempDisplay;
@@ -203,5 +217,6 @@ return "Victim Id : " + victimId+
        "\n| Lividity: " + livorColor + " (Fixed: " + isLivorFixed + ")" +
        "\n| Rigor Status: [" + rigorStage[0] + ", " + rigorStage[1] + ", " + rigorStage[2] + "]" ;
 }
-
+)
 // everytime we update the object, we need to switch the state if there is a boolean switch
+
