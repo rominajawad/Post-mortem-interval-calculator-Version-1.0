@@ -27,7 +27,7 @@ This runs the while loop for an interactive menu
             int choice = scanner.nextInt();
             scanner.nextLine(); // Clear buffer
 
-            double a1,a2,b1,b2; // declare them at top so that they are created en if they hit a no!
+            double a1,a2,b1,b2; // declare them at top so that they are created if they hit a no!
             if (choice == 1) {
                 System.out.println("Enter victim Id: ");
                 String id = scanner.nextLine();
@@ -76,12 +76,17 @@ This runs the while loop for an interactive menu
                 System.out.print("-> Legs / Lower Body Stiffness Level: ");
                 rigor[2] = scanner.nextInt();
                 scanner.nextLine();
-
-If ((isRange && ambientRange) or (!isRange&& !ambientRange)){
-Cases.add(new deceasedBody(id,b1,b2,a1,a2,color, fixed, rigor))
-} else {
-Cases.add(new deceasedBody(id,b1,b2,a1,a2,color, fixed, rigot))
+if(!isRange){
+b2=b1;
 }
+if(!ambientRange){
+a2=a1;
+}
+cases.add(new deceasedBody(
+id, b1,b1,b2,a1,a1,a2,color,fixed,rigor,isRange, ambientRange
+)
+);
+
                 System.out.println("[SUCCESS] Case profile initialized and saved into memory.");
 
             } else if (choice == 2) {
@@ -101,7 +106,7 @@ Cases.add(new deceasedBody(id,b1,b2,a1,a2,color, fixed, rigot))
                     System.out.println("[ERROR] No case data found. Please select Option 1 or Option 5 first.");
                 } else {
                     System.out.println("==================================================");
-                    System.out.println("COMPREHENSIVE PMO ANALYSIS REPORT");
+                    System.out.println("COMPREHENSIVE POST MORTEM ANALYSIS REPORT");
                     for (deceasedBody b : cases) { // going through the cases and placing the object in a variable called 'b'
                         System.out.println("Target Profile ID: " + b.getVictimId());
                         System.out.println("--------------------------------------------------");
@@ -129,7 +134,7 @@ Cases.add(new deceasedBody(id,b1,b2,a1,a2,color, fixed, rigot))
             } else {
                 System.out.println("[INVALID Choice] Please enter a value between 1 and 5.");
             }
-        }
+     }
         scanner.close();
     }
 
@@ -153,30 +158,62 @@ Cases.add(new deceasedBody(id,b1,b2,a1,a2,color, fixed, rigot))
                 String id = tokens[1];
                 int[] rigor= new int[3];
 
-                if(isRange){
-                double minB= Double.parseDouble(tokens[2]);
-                double maxB= Double.parseDouble(tokens[3]);
-                double minA= Double.parseDouble(tokens[4]);
-                double maxA= Double.parseDouble(tokens[5]);
-                String color= tokens[6];
-                boolean fixed= Boolean.parseBoolean(tokens[7]);
-                rigor[0]=Integer.parseInt(tokens[8]);
-                rigor[1]=Integer.parseInt(tokens[9]);
-                rigor[2]=Integer.parseInt(tokens[10]);
 
-                cases.add(new deceasedBody(id, minB, maxB, minA, maxA, color, fixed, rigor));
-                } else{
-                 double bTemp= Double.parseDouble(tokens[2]);
-                 double aTemp= Double.parseDouble(tokens[3]);
-                 String color= tokens[4];
-                boolean fixed= Boolean.parseBoolean(tokens[5]);
-                rigor[0]= Integer.parseInt(tokens[6]);
-                rigor[1]= Integer.parseInt(tokens[7]);
-                rigor[2]= Integer.parseInt(tokens[8]);
+if(isRange){
 
-                cases.add(new deceasedBody(id, bTemp, aTemp, color, fixed, rigor));
-                }
-                }
+    double minB = Double.parseDouble(tokens[2]);
+    double maxB = Double.parseDouble(tokens[3]);
+    double minA = Double.parseDouble(tokens[4]);
+    double maxA = Double.parseDouble(tokens[5]);
+    String color = tokens[6];
+    boolean fixed = Boolean.parseBoolean(tokens[7]);
+
+    rigor[0] = Integer.parseInt(tokens[8]);
+    rigor[1] = Integer.parseInt(tokens[9]);
+    rigor[2] = Integer.parseInt(tokens[10]);
+
+    cases.add(new deceasedBody(
+        id,
+        0,
+        minB,
+        maxB,
+        0,
+        minA,
+        maxA,
+        color,
+        fixed,
+        rigor,
+        true,
+        true
+    ));
+
+}else {
+
+    double bTemp = Double.parseDouble(tokens[2]);
+    double aTemp = Double.parseDouble(tokens[3]);
+    String color = tokens[4];
+    boolean fixed = Boolean.parseBoolean(tokens[5]);
+
+    rigor[0] = Integer.parseInt(tokens[6]);
+    rigor[1] = Integer.parseInt(tokens[7]);
+    rigor[2] = Integer.parseInt(tokens[8]);
+
+    cases.add(new deceasedBody(
+        id,
+        bTemp,
+        bTemp,
+        bTemp,
+        aTemp,
+        aTemp,
+        aTemp,
+        color,
+        fixed,
+        rigor,
+        false,
+        false
+    ));
+
+}
             fileScanner.close();
             System.out.println("[SUCCESS] External data files parsed cleanly. Total profiles loaded: " + cases.size());
             
@@ -186,4 +223,6 @@ Cases.add(new deceasedBody(id,b1,b2,a1,a2,color, fixed, rigot))
             System.out.println("[ERROR] Formatting structure exception encountered inside the external data file.");
         }
     }
+}
+
 
