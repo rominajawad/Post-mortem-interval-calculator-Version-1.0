@@ -27,7 +27,7 @@ public deceasedBody(String victimId, double bodyTemp, double bodyMinTemp, double
     boolean isBodyTempRange, boolean isAmbientTempRange )
   {
 if(rigorStage == null || rigorStage.length<3){
-Throw new illegalArgumentException("The values should contain exactly three values.");
+throw new illegalArgumentException("The values should contain exactly three values.");
 }
 this.victimId= victimId;
 this.bodyTemp= bodyTemp;
