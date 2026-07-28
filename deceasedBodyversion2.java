@@ -8,7 +8,7 @@
 
 
 
-public class deceasedBody { 
+public class deceasedBodyVersion2{ 
 private String victimId;
 private double bodyTemp;
 private double bodyMinTemp; // for range
